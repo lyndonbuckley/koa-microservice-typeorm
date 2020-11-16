@@ -1,0 +1,47 @@
+{
+  "name": "koa-microservice-typeorm",
+  "version": "0.0.0",
+  "description": "A TypeORM module for koa-microservice",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint",
+    "preversion": "npm run lint",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lyndonbuckley/koa-microservice-typeorm.git"
+  },
+  "keywords": [
+    "node",
+    "koa",
+    "server",
+    "typeorm"
+  ],
+  "author": "Lyndon Buckley <npm@lyndonbuckley.com>",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/lyndonbuckley/koa-microservice-typeorm/issues"
+  },
+  "homepage": "https://github.com/lyndonbuckley/koa-microservice-typeorm#readme",
+  "devDependencies": {
+    "@types/node": "^13.13.2",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3",
+    "@types/koa": "^2.11.6"
+  },
+  "dependencies": {
+    "koa-microservice": "^0.1.2",
+    "mysql": "^2.18.1",
+    "typeorm": "^0.2.29"
+  }
+}
