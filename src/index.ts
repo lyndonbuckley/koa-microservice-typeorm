@@ -181,6 +181,7 @@ export class MicroserviceORM {
         // return single server if no replication
         if (slaves.length === 0) {
             return {
+                host: master,
                 ...output,
                 ...details
             }
