@@ -40,7 +40,7 @@
     "@types/koa": "^2.11.6"
   },
   "dependencies": {
-    "koa-microservice": "^0.1.2",
+    "koa-microservice": "^0.2.4",
     "mysql": "^2.18.1",
     "typeorm": "^0.2.29"
   }
