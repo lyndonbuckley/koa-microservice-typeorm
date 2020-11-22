@@ -107,7 +107,7 @@ export class MicroserviceORM {
     private async healthCheck(): Promise<boolean> {
 
         // if we don't care for a database connection then return true;
-        if (!this.unhealthyWithoutConnection)
+        if (this.unhealthyWithoutConnection === false)
             return true;
 
         // use last health check if interval has not passed
