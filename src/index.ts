@@ -1,6 +1,20 @@
 import {Microservice} from "koa-microservice";
 import {Connection, createConnection, getConnection, getConnectionOptions} from "typeorm";
 import {ConnectionOptions} from "typeorm/connection/ConnectionOptions";
+import {MysqlConnectionOptions} from "typeorm/driver/mysql/MysqlConnectionOptions";
+import {PostgresConnectionOptions} from "typeorm/driver/postgres/PostgresConnectionOptions";
+
+export type MicroserviceORMConnectionOptions = MysqlConnectionOptions | PostgresConnectionOptions;
+
+export interface MicroserviceORMConfig {
+    type: "mysql" | "postgres"
+    master: string,
+    slaves?: string | string[],
+    port?: number,
+    database?: string,
+    username?: string,
+    password?: string
+}
 
 export interface MicroserviceORMOptions {
     connectionName?: string;
@@ -10,10 +24,12 @@ export interface MicroserviceORMOptions {
     connectionAttemptInterval?: number;
     healthCheckQuery?: string
     healthCheckInterval?: number;
+    config?: MicroserviceORMConfig;
 }
 export class MicroserviceORM {
     app?: Microservice;
     connection: Connection | null;
+    config?: MicroserviceORMConfig
 
     connectionRequired: boolean = true;
     unhealthyWithoutConnection: boolean = true;
@@ -41,6 +57,8 @@ export class MicroserviceORM {
             this.connectionAttemptInterval = opts.connectionAttemptInterval;
         if (opts?.healthCheckQuery)
             this.healthCheckQuery = opts.healthCheckQuery;
+        if (opts?.config)
+            this.config = opts.config;
         if (app)
             this.bindTo(app);
     }
@@ -134,6 +152,60 @@ export class MicroserviceORM {
             this._lastHealthCheckResult = result
         }
         return result;
+    }
+
+    buildConnectionOptions(config?: MicroserviceORMConfig): MicroserviceORMConnectionOptions {
+        const output = {
+            cli: {
+                entitiesDir: "./src/entity",
+                migrationsDir: "./src/migration",
+                subscribersDir: "./src/subscriber"
+            },
+            entities: ["./build/entity/*.js","./build/entity/**/*.js"],
+            subscribers: ["./build/subscriber/*.js","./build/subscriber/**/*.js"],
+            migrations: ["./build/migration/*.js"],
+            type: config?.type || this.config?.type || 'mysql'
+        };
+        const details = {
+            port: config?.port || this.config?.port || 3306,
+            username: config?.username || this.config?.username,
+            password: config?.password || this.config?.password,
+            database: config?.database || this.config?.database,
+        }
+
+        const master: string = config?.master || this.config?.master || '127.0.0.1';
+        let slaves: string | string[] = config?.slaves || this.config?.slaves || []
+        if (typeof slaves === "string")
+            slaves = [slaves];
+
+        // return single server if no replication
+        if (slaves.length === 0) {
+            return {
+                ...output,
+                ...details
+            }
+        }
+
+        // handle replication
+        const replicationSlaves = [];
+        let slave: string;
+        for (slave of slaves) {
+            replicationSlaves.push({
+                host: slave,
+                ...details
+            })
+        }
+
+        return {
+            ...output,
+            replication: {
+                master: {
+                    host: master,
+                    ...details
+                },
+                slaves: replicationSlaves
+            }
+        }
     }
 
     async getConnection(): Promise<Connection> {
