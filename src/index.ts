@@ -3,7 +3,7 @@ import {Connection, createConnection, getConnection, getConnectionOptions} from 
 import {ConnectionOptions} from "typeorm/connection/ConnectionOptions";
 import {MysqlConnectionOptions} from "typeorm/driver/mysql/MysqlConnectionOptions";
 import {PostgresConnectionOptions} from "typeorm/driver/postgres/PostgresConnectionOptions";
-
+import {DefaultContext, DefaultState} from "koa";
 export type MicroserviceORMConnectionOptions = MysqlConnectionOptions | PostgresConnectionOptions;
 
 export interface MicroserviceORMConfig {
@@ -27,7 +27,7 @@ export interface MicroserviceORMOptions {
     config?: MicroserviceORMConfig;
 }
 export class MicroserviceORM {
-    app?: Microservice;
+    app?: Microservice<DefaultContext, DefaultState>;
     connection: Connection | null;
     config?: MicroserviceORMConfig
 

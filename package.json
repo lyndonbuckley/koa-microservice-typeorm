@@ -34,13 +34,14 @@
   },
   "homepage": "https://github.com/lyndonbuckley/koa-microservice-typeorm#readme",
   "devDependencies": {
+    "@types/koa": "^2.11.6",
     "@types/node": "^13.13.2",
     "tslint": "^6.1.1",
-    "typescript": "^3.8.3",
-    "@types/koa": "^2.11.6"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
-    "koa-microservice": "^0.2.4",
+    "koa": "^2.13.1",
+    "koa-microservice": "^0.3.3",
     "mysql": "^2.18.1",
     "typeorm": "^0.2.29"
   }
