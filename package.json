@@ -43,6 +43,6 @@
     "koa": "^2.13.1",
     "koa-microservice": "^0.3.3",
     "mysql": "^2.18.1",
-    "typeorm": "^0.2.29"
+    "typeorm": "^0.2.30"
   }
 }

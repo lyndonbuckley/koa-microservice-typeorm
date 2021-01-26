@@ -107,6 +107,7 @@ export class MicroserviceORM {
 
             return this.connectionRequired ? this.connection?.isConnected : true;
         } catch (err) {
+            console.error(err);
             this.app?.error('ORM:','Error',err.message);
             return this.connectionRequired ? false : true;
         }
