@@ -11,6 +11,7 @@ export interface MicroserviceORMConfig {
     master: string,
     slaves?: string | string[],
     port?: number,
+    url?: string,
     database?: string,
     username?: string,
     password?: string
