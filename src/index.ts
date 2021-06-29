@@ -14,7 +14,8 @@ export interface MicroserviceORMConfig {
     url?: string,
     database?: string,
     username?: string,
-    password?: string
+    password?: string,
+    timezone?: string
 }
 
 export interface MicroserviceORMOptions {
@@ -75,8 +76,9 @@ export class MicroserviceORM {
     setConnectionOptions(options: ConnectionOptions): ConnectionOptions {
         if (options.name)
             this._connectionName = options.name;
+
         this._connectionOptions = options;
-        return options;
+        return this._connectionOptions;
     }
 
     bindTo(app: Microservice) {
@@ -157,7 +159,7 @@ export class MicroserviceORM {
     }
 
     buildConnectionOptions(config?: MicroserviceORMConfig): MicroserviceORMConnectionOptions {
-        const output = {
+        let output = {
             cli: {
                 entitiesDir: "./src/entity",
                 migrationsDir: "./src/migration",
@@ -168,11 +170,20 @@ export class MicroserviceORM {
             migrations: ["./build/migration/*.js"],
             type: config?.type || this.config?.type || 'mysql'
         };
-        const details = {
+
+        let details = {
             port: config?.port || this.config?.port || 3306,
             username: config?.username || this.config?.username,
             password: config?.password || this.config?.password,
             database: config?.database || this.config?.database,
+        }
+
+        let timezone = {}
+
+        if (output.type === "mysql") {
+            timezone = {
+                timezone: this.config?.timezone || "UTC"
+            }
         }
 
         const master: string = config?.master || this.config?.master || '127.0.0.1';
@@ -185,6 +196,7 @@ export class MicroserviceORM {
             return {
                 host: master,
                 ...output,
+                ...timezone,
                 ...details
             }
         }
@@ -201,6 +213,7 @@ export class MicroserviceORM {
 
         return {
             ...output,
+            ...timezone,
             replication: {
                 master: {
                     host: master,
