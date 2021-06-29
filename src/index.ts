@@ -159,7 +159,7 @@ export class MicroserviceORM {
     }
 
     buildConnectionOptions(config?: MicroserviceORMConfig): MicroserviceORMConnectionOptions {
-        let output = {
+        const output = {
             cli: {
                 entitiesDir: "./src/entity",
                 migrationsDir: "./src/migration",
@@ -171,7 +171,7 @@ export class MicroserviceORM {
             type: config?.type || this.config?.type || 'mysql'
         };
 
-        let details = {
+        const details = {
             port: config?.port || this.config?.port || 3306,
             username: config?.username || this.config?.username,
             password: config?.password || this.config?.password,
