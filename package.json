@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "koa": "^2.13.1",
-    "koa-microservice": "^0.3.5",
+    "koa-microservice": "^0.4.0",
     "mysql": "^2.18.1",
     "typeorm": "^0.2.34"
   }
