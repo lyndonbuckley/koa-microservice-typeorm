@@ -1,6 +1,6 @@
 {
   "name": "koa-microservice-typeorm",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A TypeORM module for koa-microservice",
   "main": "build/index.js",
   "types": "build/index.d.ts",
