@@ -65,7 +65,7 @@ export class MicroserviceORM {
             this.bindTo(app);
     }
 
-    private async getConnectionOptions(): Promise<ConnectionOptions> {
+    async getConnectionOptions(): Promise<ConnectionOptions> {
         let options: ConnectionOptions | undefined = this._connectionOptions;
         if (!options)
             options = await this.setConnectionOptions(await getConnectionOptions(this._connectionName));
